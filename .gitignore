@@ -1,0 +1,21 @@
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore SQLite database
+*.db
+
+# Ignore IDE files
+.idea/
+.vscode/
+
+
+#app/core/constants.py
+
+#ignore .git files
+.git;
+

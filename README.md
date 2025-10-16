@@ -1,92 +1,130 @@
-# Fastapi Skeleton
+## My FastAPI Project ##
+
+## This is a FastAPI project skeleton. ##
+
+fum-fastapi-skeleton/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── v1/
+│   │   │   ├── __init__.py
+│   │   │   ├── endpoints/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── items.py
+│   │   │   │   ├── users.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   ├── security.py
+│   ├── db/
+│   │   ├── __init__.py
+│   │   ├── session.py
+│   │   ├── base.py
+│   │   ├── schemas/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── item.py
+│   │   │   │   ├── user.py
+│   │   ├── repositories/
+│   │   ├── models/
+│   │   │   ├── __init__.py
+│   │   │   ├── base.py
+│   │   │   ├── item.py
+│   │   │   ├── user.py
+│   ├── utils/
+│   │   ├── __init__.py
+│   │   ├── logging.py
+├── tests/
+│   ├── __init__.py
+│   ├── test_items.py
+│   ├── test_users.py
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── .env
+├── .gitignore
+├── README.md
+
+
+Explanation of the Structure
+
+app/main.py: The entry point of the application. This is where the FastAPI app is initialized and where you include your routers.
+
+app/api/: This directory contains all the API-related code. It is further divided into:
+
+v1/: Version 1 of your API. You can add more versions (e.g., v2/) as your API evolves.
+
+endpoints/: Contains the route handlers for your API endpoints.
+
+app/core/: Contains core configurations, security utilities, and other shared functionality.
+
+config.py: Configuration settings (e.g., environment variables).
+
+security.py: Security-related utilities (e.g., authentication, password hashing).
+
+app/db/: Contains database-related code.
+
+session.py: Database session management.
+
+models/: SQLAlchemy models for database tables.
+
+schemas/: Contains SQLAlchemy models (if you're using a database).
+
+app/utils/: Utility functions and helpers (e.g., logging, custom validators).
+
+tests/: Contains unit and integration tests for your API.
+
+requirements.txt: Lists all Python dependencies.
+
+Dockerfile and docker-compose.yml: For containerizing your application.
+
+.env: Environment variables (e.g., database credentials, secret keys).
+
+.gitignore: Specifies files and directories to ignore in version control.
+
+By using __init__ everywhere, we can access the variables from the all over the app.
+
+
+How to run dockerfile:
+
+docker build -t fum-fastapi-skeleton .
+docker run -itd  --name fum-fastapi-skeleton -p 8000:8000  fum-fastapi-skeleton
 
 
 
-## Getting started
+API calls:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+curl -X GET "http://localhost:8000/api/v1/users/" -H "Content-Type: application/json"
+output: [{"name":"test","email":"test","id":1},{"name":"tttt","email":"rrrrr","id":2}]
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+curl -X GET "http://localhost:8000/api/v1/users/1" -H "Content-Type: application/json"
+output: {"email":"test","name":"test","id":1}
 
-## Add your files
+curl -X PUT "http://localhost:8000/api/v1/users/1" -H "Content-Type: application/json" -d '{
+    "name": "tuser",
+    "email": "tuser@example.com"
+}'
+output: {"name":"tuser","email":"tuser@example.com","id":1}
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+curl -X DELETE "http://localhost:8080/api/v1/users/2" -H "Content-Type: application/json" 
+output: {"name":"tttt","email":"rrrrr","id":2}
 
-```
-cd existing_repo
-git remote add origin https://gitlab.um.ac.ir/fastapi-microservices/fastapi-skeleton.git
-git branch -M master
-git push -uf origin master
-```
+curl -X POST "http://localhost:8000/api/v1/users/" -H "Content-Type: application/json" -d '{
+    "name": "new_user",
+    "email": "new_user@example.com"
+}'
+output: {"name":"new_user","email":"new_user@example.com","id":3}       
 
-## Integrate with your tools
+Call Apis with header:
 
-- [ ] [Set up project integrations](https://gitlab.um.ac.ir/fastapi-microservices/fastapi-skeleton/-/settings/integrations)
+curl -X GET "http://127.0.0.1:8080/api/v1/users/10" \
+-H "SYS-KEY: 123456" \
+-H "PERSON-ID: 12" \
+-H "USER-ROLES: 45" \
+-H "IP-ADDRESS: 123.456.789.0" \
+-H "USER-ID: 9422099160"
 
-## Collaborate with your team
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
 
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+In app/db/session, some event listeners are added to log all the queries sent to the database along with their execution status.

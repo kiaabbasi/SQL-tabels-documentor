@@ -1,0 +1,14 @@
+##
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+python-dotenv
+pika
+pytest 
+httpx
+mysqlclient
+python-multipart
+persiantools
+pydantic_settings
+python-dateutil
