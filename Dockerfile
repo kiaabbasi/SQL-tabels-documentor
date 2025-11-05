@@ -1,15 +1,18 @@
 # Use an official Python runtime as a parent image
 # FROM python:3.9-slim
 
-FROM dockerhub.um.ac.ir/devops/fastapi-skeleton-web:py3.12.5
+FROM dockerhub.um.ac.ir/devops/python:3.12-slim
 
-#RUN apt-get update && apt-get install -y \
-#    gcc \
-#    default-libmysqlclient-dev \
-#    build-essential \
-#    pkg-config \
-#    && rm -rf /var/lib/apt/lists/*
-
+RUN echo "deb http://repos.um.ac.ir/debian bookworm main contrib non-free-firmware \
+deb http://repos.um.ac.ir/debian bookworm-updates main contrib non-free-firmware \
+deb http://repos.um.ac.ir/debian bookworm-backports main contrib non-free-firmware \
+deb http://repos.um.ac.ir/debian-security bookworm-security main contrib non-free-firmware " \
+    > /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install telnet gcc python3-dev default-libmysqlclient-dev build-essential pkg-config -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 
 # Set the working directory
