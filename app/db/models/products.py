@@ -1,7 +1,7 @@
 from sqlalchemy import String, Integer, Date, Enum, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, UTC
-from db.base import Base
+from app.db.base import Base
 import enum
 from sqlalchemy import Enum as SAEnum
 

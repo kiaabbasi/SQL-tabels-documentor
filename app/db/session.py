@@ -8,14 +8,14 @@ from contextlib import contextmanager
 import time
 import json
 import socket
-from core.logging_config import logger
+from app.core.logging_config import logger
 from datetime import datetime
 from fastapi import Request, HTTPException
 from sqlalchemy.exc import OperationalError
 
-from core.config import DB_CONFIGS as CLUSTERS
-from utils.mg_broker import send_message_to_rabbitmq
-from core.config import DB_CONFIGS, settings
+from app.core.config import DB_CONFIGS as CLUSTERS
+from app.utils.mg_broker import send_message_to_rabbitmq
+from app.core.config import DB_CONFIGS, settings
 import traceback
 import re
 

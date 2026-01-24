@@ -4,7 +4,7 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-from app.main import app
+from main import app
 from db.session import get_db_officedb
 from db.models.products import products
 from db.models.sprints import sprints

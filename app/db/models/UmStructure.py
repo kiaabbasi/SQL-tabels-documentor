@@ -4,7 +4,7 @@ from sqlalchemy import Date, Index, String, text
 from sqlalchemy.dialects.mysql import INTEGER, SMALLINT
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 import datetime
-from db.base import Base
+from app.db.base import Base
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 

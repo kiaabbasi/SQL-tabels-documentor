@@ -6,7 +6,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 import datetime
 import decimal
 from pydantic import computed_field
-from db.base import Base
+from app.db.base import Base
 
 class Countries(Base):
     __tablename__ = 'countries'

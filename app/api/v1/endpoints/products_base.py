@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
-from db.session import get_db_officedb
-from db.schemas.product import ProductCreate, ProductOut, ProductUpdate
-from core.services import product_service, common_service
-from core.permissions import require_product_role_admin
-from core.services.llm_service import LLMService
+from app.db.session import get_db_officedb
+from app.db.schemas.product import ProductCreate, ProductOut, ProductUpdate
+from app.core.services import product_service, common_service
+from app.core.permissions import require_product_role_admin
+from app.core.services.llm_service import LLMService
 
 router = APIRouter(prefix="/products", tags=["Products"])
 llm = LLMService()

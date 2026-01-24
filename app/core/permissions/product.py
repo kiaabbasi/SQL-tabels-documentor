@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from core.services.product_service import get_product_by_id, get_scrum_role
+from app.core.services.product_service import get_product_by_id, get_scrum_role
 #from db.models.ScrumUserRole import ScrumRoleEnum
 
 def require_product_owner(db: Session, product_id: int, person_id: int):

@@ -1,8 +1,8 @@
 from typing import List
 from fastapi import APIRouter, Depends, Header
 from sqlalchemy.orm import Session
-from db.session import get_db_officedb
-from core.services import common_service as svc
+from app.db.session import get_db_officedb
+from app.core.services import common_service as svc
 
 router = APIRouter()
 

@@ -1,6 +1,6 @@
 import pika
 import urllib.parse 
-from core.constants import MG_BROKER_HOST, MG_BROKER_USER, MG_BROKER_PASS, MG_BROKER_PORT, MG_BROKER_LOG_DB_QUEUE
+from app.core.constants import MG_BROKER_HOST, MG_BROKER_USER, MG_BROKER_PASS, MG_BROKER_PORT, MG_BROKER_LOG_DB_QUEUE
 
 
 def get_rabbitmq_connection():
