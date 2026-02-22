@@ -19,7 +19,7 @@ deb http://repos.um.ac.ir/debian-security bookworm-security main contrib non-fre
 WORKDIR /app
 
 # Set PYTHONPATH to include the app directory
-ENV PYTHONPATH=/app/app
+ENV PYTHONPATH=/app
 
 # Copy the requirements file
 COPY requirements.txt .
@@ -35,4 +35,4 @@ COPY . .
 EXPOSE 8000
 
 # Command to run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
