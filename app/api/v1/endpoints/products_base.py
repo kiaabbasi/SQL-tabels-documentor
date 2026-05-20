@@ -4,31 +4,8 @@ from app.db.session import get_db_officedb
 from app.db.schemas.product import ProductCreate, ProductOut, ProductUpdate
 from app.core.services import product_service, common_service
 from app.core.permissions import require_product_role_admin
-from app.core.services.llm_service import LLMService
 
 router = APIRouter(prefix="/products", tags=["Products"])
-llm = LLMService()
-
-@router.get("/{product_id}/summary")
-def summarize_product(product_id: int, db: Session = Depends(get_db_officedb)):
-    """
-    چکیده‌ای از وضعیت محصول بر اساس اپیک‌ها و داستان‌های کاربر.
-    """
-    system_prompt = (
-        "تو یک تحلیلگر پروژه‌های اسکرام هستی. "
-        "بر اساس اطلاعات زیر، خلاصه‌ای فارسی و روان از وضعیت محصول بنویس. "
-        "در متن خود وضعیت کلی، اهداف کلیدی اپیک‌ها و روند پیشرفت داستان‌های کاربر را توضیح بده."
-    )
-    query = "تست"
-
-    result = llm.query(system_prompt, query, 0.3)
-
-    return {
-        "product_id": product_id,
-        "summary": result["response"],
-        "model": result["model"]
-    }
-
 
 @router.post("/", response_model=ProductOut)
 def create_product(
