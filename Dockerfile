@@ -3,10 +3,12 @@
 
 FROM dockerhub.um.ac.ir/devops/python:3.12-slim
 
-RUN echo "deb http://repos.um.ac.ir/debian bookworm main contrib non-free-firmware \
-deb http://repos.um.ac.ir/debian bookworm-updates main contrib non-free-firmware \
-deb http://repos.um.ac.ir/debian bookworm-backports main contrib non-free-firmware \
-deb http://repos.um.ac.ir/debian-security bookworm-security main contrib non-free-firmware " \
+RUN rm -rf /etc/apt/sources.list.d/*
+
+RUN echo "deb [trusted=yes] http://repos.um.ac.ir/debian bookworm main contrib non-free-firmware \
+deb [trusted=yes] http://repos.um.ac.ir/debian bookworm-updates main contrib non-free-firmware \
+deb [trusted=yes] http://repos.um.ac.ir/debian bookworm-backports main contrib non-free-firmware \
+deb [trusted=yes] http://repos.um.ac.ir/debian-security bookworm-security main contrib non-free-firmware " \
     > /etc/apt/sources.list && \
     apt-get update && \
     apt-get upgrade -y && \
