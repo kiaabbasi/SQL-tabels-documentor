@@ -13,3 +13,4 @@ persiantools
 pydantic_settings
 python-dateutil
 requests
+neo4j

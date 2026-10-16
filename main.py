@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.endpoints import (products_base,
                               common,
+                              tables,
                               )
 from app.middlewares.middleware import RequestContextMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -47,6 +48,7 @@ app.add_middleware(
 app.add_middleware(RequestContextMiddleware)
 app.include_router(products_base.router, prefix="/api/v1")
 app.include_router(common.router, prefix="/api/v1/common")
+app.include_router(tables.router, prefix="/api/v1")
 
 @app.get("/health")
 async def health():

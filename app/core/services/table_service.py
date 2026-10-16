@@ -1,0 +1,32 @@
+from app.db.repositories.table_repository import (
+    fetch_table_pages_relations,
+)
+
+
+def get_table_relations_service(
+    name: str,
+) -> tuple[list[str], list[str], list[str]] | None:
+
+    relations = fetch_table_pages_relations(name)
+
+    if relations is None:
+        return None
+
+    read_relations: list[str] = []
+    write_relations: list[str] = []
+    other_relations: list[str] = []
+
+    for relation in relations:
+        page_name = relation["page_name"]
+        actions = relation["actions"]
+
+        if "Read" in actions:
+            read_relations.append(page_name)
+
+        if "Write" in actions:
+            write_relations.append(page_name)
+
+        if "Other" in actions:
+            other_relations.append(page_name)
+
+    return read_relations, write_relations, other_relations

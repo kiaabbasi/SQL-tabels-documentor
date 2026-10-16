@@ -34,6 +34,11 @@ class Settings(BaseSettings):
     OFFICEDB_PASSWORD: str | None = None
     OFFICEDB_DB_PROJECTMANAGEMENT: str | None = None
 
+    # Neo4j config
+    NEO4J_ADDRESS: str | None = None
+    NEO4J_USERNAME: str | None = None
+    NEO4J_PASSWORD: str | None = None
+
     # SLAVE config
     SLAVE_HOST: str | None = None
     SLAVE_PORT: str | None = None
