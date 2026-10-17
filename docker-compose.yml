@@ -7,3 +7,12 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
+    env_file:
+      - app/.env
+    environment:
+      # 127.0.0.1 inside the container is the container itself, not the host.
+      # host-gateway resolves host.docker.internal to the Docker host, where
+      # the neo4j container publishes port 7687.
+      NEO4J_ADDRESS: bolt://host.docker.internal:7687
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
