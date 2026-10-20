@@ -28,3 +28,22 @@ def get_connection_pool():
         )
 
     return _connection_pool
+
+
+def fetch_rows(query: str, params: tuple = ()) -> list[dict]:
+    """Run a query on a pooled connection and map the rows to dicts."""
+    connection = get_connection_pool().get_connection()
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(query, params)
+
+            columns = [column[0] for column in cursor.description]
+            rows = cursor.fetchall()
+        finally:
+            cursor.close()
+    finally:
+        # Return the connection to the pool.
+        connection.close()
+
+    return [dict(zip(columns, row)) for row in rows]

@@ -17,13 +17,13 @@ class Settings(BaseSettings):
     # MariaDB configuration
     MARIADB_ADDRESS: str | None = None
     MARIADB_ROOT_PASSWORD: str | None = None
-    MARIADB_DATABASE: str | None = None
+    MARIADB_DATABASE: str = "myDataBase"
 
     # Application configuration
     DEBUG: bool = True
 
     # Pagination configuration
-    TABLES_PAGE_SIZE: int = 50
+    PAGINATIONSIZE: int = 50
 
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",

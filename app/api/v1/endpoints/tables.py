@@ -11,16 +11,52 @@ async def get_tables(
 ):
     tables, has_next = table_service.get_all_tables(
         page=page,
-        page_size=settings.TABLES_PAGE_SIZE,)
+        page_size=settings.PAGINATIONSIZE,)
     return {
         "tables": tables,
         "page": page,
-        "page_size": settings.TABLES_PAGE_SIZE,
+        "page_size": settings.PAGINATIONSIZE,
         "has_next": has_next,
     }
 
 
-@router.get("/getreleations/{table_name}")
+@router.get("/without-description/")
+async def get_tables_without_description():
+    tables = table_service.get_tables_without_description_service()
+    return {
+        "count": len(tables),
+        "tables": tables,
+    }
+
+
+@router.get("/fields/without-description/")
+async def get_fields_without_description():
+    fields = table_service.get_fields_without_description_service()
+    return {
+        "count": len(fields),
+        "fields": fields,
+    }
+
+
+@router.get("/field-data-mappings/without-description/")
+async def get_field_data_mappings_without_show_value():
+    mappings = table_service.get_field_data_mappings_without_show_value_service()
+    return {
+        "count": len(mappings),
+        "field_data_mappings": mappings,
+    }
+
+
+@router.get("/{table_name}/field-data-mappings/")
+async def get_field_data_mappings(table_name: str):
+    mappings = table_service.get_field_data_mappings_service(table_name)
+    return {
+        "table": table_name,
+        "field_data_mappings": mappings,
+    }
+
+
+@router.get("/{table_name}/relations/")
 async def get_table_relations(table_name: str):
     relations = table_service.get_table_relations_service(table_name)
     if relations is None:
@@ -33,42 +69,18 @@ async def get_table_relations(table_name: str):
         "other": other,
     }
 
-@router.get("/")
-async def check_connections():
-    """
-    Test endpoint: verifies both database drivers can actually connect.
+@router.get("/{table_name}/fields/")
+async def get_table_fields(table_name: str):
+    fields = table_service.get_table_fields_service(table_name)
+    return {
+        "table": table_name,
+        "fields": fields,
+    }
 
-    Only messages that differ per database are echoed in the response;
-    everything else (queries, auth) stays internal.
-    """
-    response: dict = {"neo4j": None, "mariadb": None}
 
-    # --- Neo4j ---
-    try:
-        from app.db.neo4j import get_driver
-
-        def _neo4j_work(tx):
-            tx.run("RETURN 1 AS ping").single()
-
-        with get_driver().session() as session:
-            session.execute_write(_neo4j_work)
-
-        response["neo4j"] = "ok"
-
-    except Exception as e:
-        response["neo4j"] = "failed"
-
-    # --- MariaDB ---
-    try:
-        conn = mariadb.get_connection()
-
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT 1")
-            cursor.fetchall()
-
-        response["mariadb"] = "ok"
-
-    except Exception:
-        response["mariadb"] = "failed"
-
-    return response
+@router.get("/{table_name}/info/")
+async def get_table_information(table_name: str):
+    information = table_service.get_table_information_service(table_name)
+    if information is None:
+        raise HTTPException(status_code=404, detail=f"Table '{table_name}' does not exist.")
+    return information
