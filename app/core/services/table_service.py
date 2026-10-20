@@ -4,8 +4,8 @@ from app.db.repositories.table_repository import (
     fetch_tables
 )
 
-def get_all_tables(page: int = 1) -> tuple[list[dict], bool]:
-    return fetch_tables(page, settings.tables_page_size)
+def get_all_tables(page: int = 1, page_size: int = settings.TABLES_PAGE_SIZE) -> tuple[list[dict], bool]:
+    return fetch_tables(page, page_size)
 
 
 def get_table_relations_service(

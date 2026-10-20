@@ -9,20 +9,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent  # .../app
 load_dotenv(str(BASE_DIR / ".env"), encoding="utf-8")
 
 class Settings(BaseSettings):
-
-
-    # Neo4j config
+    # Neo4j configuration
     NEO4J_ADDRESS: str | None = None
     NEO4J_USERNAME: str | None = None
     NEO4J_PASSWORD: str | None = None
 
-    mariadb_address : str | None =None
-    mariadb_root_password: str | None =None
-    debug: bool  =True
+    # MariaDB configuration
+    MARIADB_ADDRESS: str | None = None
+    MARIADB_ROOT_PASSWORD: str | None = None
+    MARIADB_DATABASE: str | None = None
 
-    # Static pagination size for table listings (not client-controllable)
-    tables_page_size: int = 50
-    model_config = SettingsConfigDict(env_file=str(BASE_DIR / ".env"), extra="ignore")
+    # Application configuration
+    DEBUG: bool = True
+
+    # Pagination configuration
+    TABLES_PAGE_SIZE: int = 50
+
+    model_config = SettingsConfigDict(
+        env_file=BASE_DIR / ".env",
+        extra="ignore",
+        case_sensitive=False,
+    )
 
 
 settings = Settings()

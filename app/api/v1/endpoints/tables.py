@@ -11,12 +11,11 @@ async def get_tables(
 ):
     tables, has_next = table_service.get_all_tables(
         page=page,
-        page_size=settings.tables_page_size,
-    )
+        page_size=settings.TABLES_PAGE_SIZE,)
     return {
         "tables": tables,
         "page": page,
-        "page_size": settings.tables_page_size,
+        "page_size": settings.TABLES_PAGE_SIZE,
         "has_next": has_next,
     }
 
@@ -33,3 +32,43 @@ async def get_table_relations(table_name: str):
         "write": write,
         "other": other,
     }
+
+@router.get("/")
+async def check_connections():
+    """
+    Test endpoint: verifies both database drivers can actually connect.
+
+    Only messages that differ per database are echoed in the response;
+    everything else (queries, auth) stays internal.
+    """
+    response: dict = {"neo4j": None, "mariadb": None}
+
+    # --- Neo4j ---
+    try:
+        from app.db.neo4j import get_driver
+
+        def _neo4j_work(tx):
+            tx.run("RETURN 1 AS ping").single()
+
+        with get_driver().session() as session:
+            session.execute_write(_neo4j_work)
+
+        response["neo4j"] = "ok"
+
+    except Exception as e:
+        response["neo4j"] = "failed"
+
+    # --- MariaDB ---
+    try:
+        conn = mariadb.get_connection()
+
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchall()
+
+        response["mariadb"] = "ok"
+
+    except Exception:
+        response["mariadb"] = "failed"
+
+    return response

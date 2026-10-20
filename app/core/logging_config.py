@@ -7,7 +7,7 @@ if not logger.handlers:
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-if settings.debug:
+if settings.DEBUG:
     logger.setLevel(logging.DEBUG)
 
 sqlalchemy_logger = logging.getLogger("sqlalchemy.engine")

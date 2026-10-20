@@ -2,15 +2,11 @@
 fastapi
 uvicorn
 sqlalchemy
+mariadb
+neo4j
 pydantic
 python-dotenv
-pika
 pytest 
 httpx
-mysqlclient
-python-multipart
-persiantools
 pydantic_settings
 python-dateutil
-requests
-neo4j
