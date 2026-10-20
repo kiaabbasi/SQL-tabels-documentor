@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     mariadb_address : str | None =None
     mariadb_root_password: str | None =None
     debug: bool  =True
+
+    # Static pagination size for table listings (not client-controllable)
+    tables_page_size: int = 50
     model_config = SettingsConfigDict(env_file=str(BASE_DIR / ".env"), extra="ignore")
 
 

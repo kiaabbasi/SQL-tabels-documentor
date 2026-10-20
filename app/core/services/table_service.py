@@ -1,6 +1,11 @@
+from app.core.config import settings
 from app.db.repositories.table_repository import (
     fetch_table_pages_relations,
+    fetch_tables
 )
+
+def get_all_tables(page: int = 1) -> tuple[list[dict], bool]:
+    return fetch_tables(page, settings.tables_page_size)
 
 
 def get_table_relations_service(

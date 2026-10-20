@@ -1,12 +1,24 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
+from app.core.config import settings
 from app.core.services import table_service
 
 router = APIRouter(prefix="/tables", tags=["Tables"])
 
 
 @router.get("/")
-async def get_tables():
-    return {"tables": []}
+async def get_tables(
+    page: int = Query(1, ge=1, description="Page number (1-indexed)"),
+):
+    tables, has_next = table_service.get_all_tables(
+        page=page,
+        page_size=settings.tables_page_size,
+    )
+    return {
+        "tables": tables,
+        "page": page,
+        "page_size": settings.tables_page_size,
+        "has_next": has_next,
+    }
 
 
 @router.get("/getreleations/{table_name}")
