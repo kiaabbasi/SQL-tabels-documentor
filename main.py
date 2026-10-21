@@ -2,7 +2,7 @@ from app.core.logging_config import logger
 import os
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1.endpoints import tables
+from app.api.v1.endpoints import tables,pages
 from app.middlewares.middleware import RequestContextMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.openapi.docs import get_swagger_ui_html
@@ -44,7 +44,7 @@ app.add_middleware(
 # Define another middleware to apply our custom dependencies
 app.add_middleware(RequestContextMiddleware)
 app.include_router(tables.router, prefix="/api/v1")
-
+app.include_router(pages.router,prefix="/api/v1")
 @app.get("/health")
 async def health():
     return {" OK ": True}
