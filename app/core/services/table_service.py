@@ -12,7 +12,7 @@ from app.db.repositories.table_repository import (
     fetch_tables
 )
 
-def get_all_tables(page: int = 1, page_size: int = settings.TABLES_PAGE_SIZE) -> tuple[list[dict], bool]:
+def get_all_tables(page: int = 1, page_size: int = settings.PAGINATIONSIZE) -> tuple[list[dict], bool]:
     return fetch_tables(page, page_size)
 
 
@@ -53,17 +53,17 @@ def get_table_information_service(name: str) -> dict | None:
     return fetch_table_information(name)
 
 
-def get_tables_without_description_service() -> list[dict]:
-    return fetch_tables_without_description()
+def get_tables_without_description_service(*args, **kwargs) -> dict:
+    return fetch_tables_without_description(*args, **kwargs)
 
 
-def get_fields_without_description_service() -> list[dict]:
-    return fetch_fields_without_description()
+def get_fields_without_description_service(*args, **kwargs) -> list[dict]:
+    return fetch_fields_without_description(*args, **kwargs)
 
 
 def get_field_data_mappings_service(name: str) -> list[dict]:
     return fetch_field_data_mappings(name)
 
 
-def get_field_data_mappings_without_show_value_service() -> list[dict]:
-    return fetch_field_data_mappings_without_show_value()
+def get_field_data_mappings_without_show_value_service(*args, **kwargs) -> list[dict]:
+    return fetch_field_data_mappings_without_show_value(*args, **kwargs)

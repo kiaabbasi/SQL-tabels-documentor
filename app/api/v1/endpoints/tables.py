@@ -1,6 +1,8 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query,Depends
 from app.core.config import settings
 from app.core.services import table_service
+from app.api.v1.dependencies.pagination import get_pagination
+from app.core.pagination import PaginationParams
 
 router = APIRouter(prefix="/tables", tags=["Tables"])
 
@@ -21,28 +23,27 @@ async def get_tables(
 
 
 @router.get("/without-description/")
-async def get_tables_without_description():
-    tables = table_service.get_tables_without_description_service()
+async def get_tables_without_description(pagination: PaginationParams = Depends(get_pagination),):
+    tables = table_service.get_tables_without_description_service(limit = pagination.limit, offset = pagination.offset)
     return {
-        "count": len(tables),
-        "tables": tables,
+        "tables": tables['items'],
+        'has_next' : tables['has_more_page']
     }
 
 
 @router.get("/fields/without-description/")
-async def get_fields_without_description():
-    fields = table_service.get_fields_without_description_service()
+async def get_fields_without_description(pagination: PaginationParams = Depends(get_pagination)):
+    fields = table_service.get_fields_without_description_service(limit = pagination.limit, offset = pagination.offset)
     return {
-        "count": len(fields),
         "fields": fields,
     }
 
 
 @router.get("/field-data-mappings/without-description/")
-async def get_field_data_mappings_without_show_value():
-    mappings = table_service.get_field_data_mappings_without_show_value_service()
+async def get_field_data_mappings_without_show_value(pagination: PaginationParams = Depends(get_pagination)):
+    mappings = table_service.get_field_data_mappings_without_show_value_service(limit = pagination.limit, offset = pagination.offset)
     return {
-        "count": len(mappings),
+        
         "field_data_mappings": mappings,
     }
 

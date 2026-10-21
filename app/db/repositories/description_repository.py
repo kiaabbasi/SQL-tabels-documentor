@@ -3,35 +3,76 @@ from app.db.mariadb import fetch_rows
 
 # A description counts as "missing" when it is NULL, an empty string,
 # or the placeholder text "نامشخص" (unknown).
-_EMPTY_DESCRIPTION = "(description IS NULL OR description = '' OR description = 'نامشخص')"
+_EMPTY_DESCRIPTION = "({0} IS NULL OR {0} = '' OR {0} = 'نامشخص')"
 
 
-def fetch_tables_without_description() -> list[dict]:
-    """Fetch every MIS_Tables row whose description is empty."""
+def _fetch_page(
+    table: str,
+    column: str,
+    order_by: str,
+    limit: int | None = None,
+    offset: int | None = None,
+) -> dict:
+    """Select rows of `table` where `column` is empty, with optional limit/offset.
+
+    If limit and offset are not set, all rows are returned.
+    Returns {"items": [...], "has_more_page": bool}.
+    """
     query = f"""
-    SELECT * FROM `{settings.MARIADB_DATABASE}`.`MIS_Tables`
-    WHERE {_EMPTY_DESCRIPTION}
-    ORDER BY name
+    SELECT * FROM `{settings.MARIADB_DATABASE}`.`{table}`
+    WHERE {_EMPTY_DESCRIPTION.format(column)}
+    ORDER BY {order_by}
     """
 
-    return fetch_rows(query)
+    if limit is not None:
+        # Ask for one extra row to know if there is another page.
+        query += f" LIMIT {int(limit) + 1}"
+        if offset:
+            query += f" OFFSET {int(offset)}"
+    elif offset:
+        # MariaDB does not allow OFFSET without LIMIT, so use the max value.
+        query += f" LIMIT 18446744073709551615 OFFSET {int(offset)}"
+
+    rows = fetch_rows(query)
+
+    has_more_page = False
+    if limit is not None and len(rows) > limit:
+        has_more_page = True
+        rows = rows[:limit]
+
+    return {"items": rows, "has_more_page": has_more_page}
 
 
-def fetch_field_data_mappings_without_show_value() -> list[dict]:
-    """Fetch every FieldDataMappings row whose ShowValue is empty."""
-    query = f"""
-    SELECT * FROM `{settings.MARIADB_DATABASE}`.`FieldDataMappings`
-    WHERE {_EMPTY_DESCRIPTION}
+def fetch_tables_without_description(
+    limit: int | None = None,
+    offset: int | None = None,
+) -> dict:
+    """Fetch MIS_Tables rows whose description is empty.
+
+    Returns {"items": [...], "has_more_page": bool}.
     """
+    return _fetch_page("MIS_Tables", "description", "id", limit, offset)
 
-    return fetch_rows(query)
 
+def fetch_field_data_mappings_without_show_value(
+    limit: int | None = None,
+    offset: int | None = None,
+) -> dict:
+    """Fetch FieldDataMappings rows whose ShowValue is empty.
 
-def fetch_fields_without_description() -> list[dict]:
-    """Fetch every MIS_TableFields row whose description is empty."""
-    query = f"""
-    SELECT * FROM `{settings.MARIADB_DATABASE}`.`MIS_TableFields`
-    WHERE {_EMPTY_DESCRIPTION}
+    Returns {"items": [...], "has_more_page": bool}.
     """
+    return _fetch_page(
+        "FieldDataMappings", "ShowValue", "FieldsDataMappingID", limit, offset
+    )
 
-    return fetch_rows(query)
+
+def fetch_fields_without_description(
+    limit: int | None = None,
+    offset: int | None = None,
+) -> dict:
+    """Fetch MIS_TableFields rows whose description is empty.
+
+    Returns {"items": [...], "has_more_page": bool}.
+    """
+    return _fetch_page("MIS_TableFields", "description", "id", limit, offset)
